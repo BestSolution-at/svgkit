@@ -1,5 +1,41 @@
 import { SkNode, stringify, SVG_NAMESPACE, attr } from "./Base";
-import { coordinate, length, bounds, IShape, paint } from "./Types";
+import { coordinate, length, bounds, IShape, paint, stringList, transformList } from "./Types";
+
+export class SkPath extends SkNode {
+    static create( init? : ( obj : SkPath ) => void ) : SkPath {
+        return SkPath.adapt(document.createElementNS(SVG_NAMESPACE,"rect"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkPath ) => void) : SkPath {
+        var c = element["sk"];
+        c = c ? c : new SkPath(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+    
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+    
+    get d() : string { return this.prop("d") }
+    set d( d : string ) { this.prop("d",d) }
+
+    get pathLength() : string { return this.prop("pathLength") }
+    set pathLength( pathLength : string ) { this.prop("pathLength",pathLength) } 
+}
 
 export class SkRect extends SkNode implements IShape {
     static create( init? : ( obj : SkRect ) => void ) : SkRect {

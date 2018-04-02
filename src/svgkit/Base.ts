@@ -1,6 +1,7 @@
-import { coordinate, length, bounds, IShape, paint, INode, stringifiable, transformList } from "./Types";
+import { coordinate, length, bounds, IShape, paint, INode, stringifiable, transformList, stringList, preserveAspectRatio, IGraphicsElement, ISvg, ISymbol, IG, IUse, IImage } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
+export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
 
 export function createSvgNode( name : string) : Element {
     return document.createElementNS(SVG_NAMESPACE, name);
@@ -39,6 +40,10 @@ export abstract class SkNode implements INode {
         }
         return this.domNode.getAttribute(name);
     }
+
+    id( id? : string ) : string {
+        return this.prop("id",id);
+    }
 }
 
 export class SkSvg extends SkNode {
@@ -47,7 +52,10 @@ export class SkSvg extends SkNode {
     }
 
     static create(parent? : Element) : SkSvg {
-        var s = new SkSvg( document.createElementNS(SVG_NAMESPACE,"svg") )
+        var e = document.createElementNS(SVG_NAMESPACE,"svg");
+        e.setAttribute("xmlns:xlink",XLINK_NAMSPACE);
+        var s = new SkSvg( e )
+        
         if( parent ) {
             parent.appendChild( s.domNode );
         }
@@ -58,6 +66,17 @@ export class SkSvg extends SkNode {
         return new SkSvg( domNode );
     }
 
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+
+    // svg properties
     get x() : coordinate { return this.prop("x") }
     set x( x : coordinate) { this.prop("x", stringify(x) ) }
 
@@ -73,6 +92,24 @@ export class SkSvg extends SkNode {
     get viewBox() : string | bounds { return this.prop("viewBox") }
     set viewBox( viewBox : string | bounds ) { this.prop("viewBox", viewBox) }
 
+    get preserveAspectRatio() : string | preserveAspectRatio { return this.prop("preserveAspectRatio") }
+    set preserveAspectRatio( preserveAspectRatio : string | preserveAspectRatio ) { this.prop("preserveAspectRatio", preserveAspectRatio) }
+
+    // TODO get/set zoomAndPan
+
+    get version() : string { return this.prop("version") }
+    set version( version : string ) { this.prop("version",version) }
+
+    get baseProfile() : string { return this.prop("baseProfile") }
+    set baseProfile( baseProfile : string ) { this.prop("baseProfile",baseProfile) }
+
+    get contentScriptType() : string { return this.prop("contentScriptType") }
+    set contentScriptType( contentScriptType : string ) { this.prop("contentScriptType", contentScriptType) }
+
+    get contentStyleType() : string { return this.prop("contentStyleType") }
+    set contentStyleType( contentScriptType : string ) { this.prop("contentStyleType", contentScriptType) }
+
+    // custom properties
     get bounds() : bounds {
         return new bounds(this.x,this.y,this.width,this.height)
     }
@@ -105,10 +142,183 @@ export class SkG extends SkNode {
         return c;
     }
 
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+
     get transform() : transformList | string { return this.prop("transform") }
     set transform( transform : transformList | string ) { this.prop("transform",transform) }
 
     addChild( node : IShape ) {
         this.domNode.appendChild( node.domNode )
     }
+}
+
+export class SkDefs extends SkNode {
+    static create( init? : ( obj : SkDefs ) => void ) : SkDefs {
+        return SkDefs.adapt(document.createElementNS(SVG_NAMESPACE,"defs"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkDefs ) => void) : SkDefs {
+        var c = element["sk"];
+        c = c ? c : new SkDefs(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+}
+
+export class SkDesc extends SkNode {
+    // TODO
+}
+
+export class SkTitle extends SkNode {
+    // TODO
+}
+
+export class SkSymbol extends SkNode {
+    static create( init? : ( obj : SkSymbol ) => void ) : SkSymbol {
+        return SkSymbol.adapt(document.createElementNS(SVG_NAMESPACE,"symbol"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkSymbol ) => void) : SkSymbol {
+        var c = element["sk"];
+        c = c ? c : new SkSymbol(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+    
+    get viewBox() : string | bounds { return this.prop("viewBox") }
+    set viewBox( viewBox : string | bounds ) { this.prop("viewBox", viewBox) }
+
+    get preserveAspectRatio() : string | preserveAspectRatio { return this.prop("preserveAspectRatio") }
+    set preserveAspectRatio( preserveAspectRatio : string | preserveAspectRatio ) { this.prop("preserveAspectRatio", preserveAspectRatio) }
+}
+
+export class SkUse extends SkNode {
+    static create( init? : ( obj : SkUse ) => void ) : SkUse {
+        return SkUse.adapt(document.createElementNS(SVG_NAMESPACE,"use"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkUse ) => void) : SkUse {
+        var c = element["sk"];
+        c = c ? c : new SkUse(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+    
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
+    get x() : coordinate { return this.prop("x") }
+    set x( x : coordinate) { this.prop("x", stringify(x) ) }
+
+    get y() : coordinate { return this.prop("y") }
+    set y( y : coordinate) { this.prop("y", stringify(y) ) }
+
+    get width() : length { return this.prop("width") }
+    set width( width : length) { this.prop("width", stringify(width) ) }
+
+    get height() : length { return this.prop("height") }
+    set height( height : length) { this.prop("height", stringify(height) ) }
+    
+    get href() : string | IGraphicsElement | ISvg | ISymbol | IG | IUse { 
+        return this.domNode.getAttributeNS(XLINK_NAMSPACE,"href");
+    }
+    
+    set href( href : string | IGraphicsElement | ISvg | ISymbol | IG | IUse ) {
+        if( typeof(href) === "string" ) {
+            this.domNode.setAttributeNS(XLINK_NAMSPACE,"href",href)
+        } else {
+            this.domNode.setAttributeNS(XLINK_NAMSPACE,"href","#" + href.id())
+        }
+    }
+}
+
+export class SkImage extends SkNode implements IImage {
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+    
+    get preserveAspectRatio() : string | preserveAspectRatio { return this.prop("preserveAspectRatio") }
+    set preserveAspectRatio( preserveAspectRatio : string | preserveAspectRatio ) { this.prop("preserveAspectRatio", preserveAspectRatio) }
+    
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
+    get href() : string | IImage { 
+        return this.domNode.getAttributeNS(XLINK_NAMSPACE,"href");
+    }
+    
+    set href( href : string | IImage ) {
+        if( typeof(href) === "string" ) {
+            this.domNode.setAttributeNS(XLINK_NAMSPACE,"href",href)
+        } else {
+            this.domNode.setAttributeNS(XLINK_NAMSPACE,"href",href.id())
+        }
+    }
+}
+
+export class SkSwitch {
+
+}
+
+export class Style {
+
 }

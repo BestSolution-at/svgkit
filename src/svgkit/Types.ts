@@ -1,3 +1,5 @@
+import { stringify } from "./Base";
+
 export type length = number | string
 export type coordinate = length
 
@@ -133,15 +135,63 @@ export class transformList implements stringifiable {
     }
 }
 
+export class stringList implements stringifiable {
+    readonly items : string[]
 
+    constructor(...items : string[]) {
+        this.items = items
+    }
+
+    asString() : string {
+        return this.items.join(",")
+    }
+}
 
 export type paint = string
 
+export enum PreserveAspectRatioAlign {
+    none = "none", 
+    xMinYMin = "xMinYMin", 
+    xMidYMin = "xMidYMin", 
+    xMaxYMin = "xMaxYMin", 
+    xMinYMid = "xMinYMid",
+    xMidYMid = "xMidYMid", 
+    xMaxYMid = "xMaxYMid", 
+    xMinYMax = "xMinYMax", 
+    xMidYMax = "xMidYMax",
+    xMaxYMax = "xMaxYMax"
+}
 
+export class preserveAspectRatio implements stringifiable {
+    readonly defer : boolean
+    readonly align : PreserveAspectRatioAlign
+    readonly meetOrSlice : "meet" | "slice"
 
+    constructor( algin : PreserveAspectRatioAlign, meetOrSlice? : "meet" | "slice", defer? : boolean ) {
+        this.defer = defer
+        this.align = algin
+        this.meetOrSlice = meetOrSlice ? meetOrSlice : "meet"
+    }
+
+    asString() : string {
+        if( this.defer ) {
+            return `${this.align} ${this.meetOrSlice}`
+        }
+        return `defer ${this.align} ${this.meetOrSlice}`
+    }
+}
 
 export interface INode {
     readonly domNode : Element
+    
+    id( id? : string ) : string 
     prop( name : string, value? : string ) : string
 }
-export interface IShape extends INode {}
+
+export interface IGraphicsElement extends INode {}
+export interface ISvg extends INode {}
+export interface ISymbol extends INode {}
+export interface IG extends INode {}
+export interface IUse extends INode {}
+export interface IImage extends INode {}
+export interface IShape extends INode, IGraphicsElement {}
