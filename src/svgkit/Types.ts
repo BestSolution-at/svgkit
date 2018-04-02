@@ -60,6 +60,67 @@ export class rotate implements transform {
     }
 }
 
+export class matrix implements transform {
+    readonly a : number
+    readonly b : number
+    readonly c : number
+    readonly d : number
+    readonly e : number
+    readonly f : number
+
+    constructor( a : number, b : number, c : number, d : number, e : number, f: number ) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+    }
+
+    asString() : string {
+        return `matrix(${this.a} ${this.b} ${this.c} ${this.d} ${this.e} ${this.f})`
+    }
+}
+
+export class scale implements transform {
+    readonly sx : number
+    readonly sy : number
+
+    constructor( sx : number, sy? : number) {
+        this.sx = sx
+        this.sy = sy
+    }
+
+    asString() : string {
+        if( this.sy ) {
+            return `scale(${this.sx} ${this.sy})`
+        }
+        return `scale(${this.sx})`
+    }
+}
+
+export class skewX implements transform {
+    readonly skewX : number
+    constructor( skewX : number ) {
+        this.skewX = skewX
+    }
+
+    asString() : string {
+        return `skewX(${this.skewX})`
+    }
+}
+
+export class skewY implements transform {
+    readonly skewY : number
+    constructor( skewY : number ) {
+        this.skewY = skewY
+    }
+
+    asString() : string {
+        return `skewY(${this.skewY})`
+    }
+}
+
 export class transformList implements stringifiable {
     readonly transforms : transform[]
 

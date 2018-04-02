@@ -1,6 +1,6 @@
 import { SkSvg, SkG } from "../../../svgkit/Base";
 import { SkRect } from "../../../svgkit/Shape";
-import { bounds } from "../../../svgkit/Types";
+import { bounds, transformList, translate, rotate } from "../../../svgkit/Types";
 
 export function startRectangle(element : Element) {
     console.log("launch rectangle");
@@ -37,8 +37,8 @@ export function startRectangle(element : Element) {
         o.rx = 50
     }) )
 
-    svg.addChild( SkG.create( o => {
-        o.transform = "translate(700 210) rotate(-30)"
+    svg.addChild( SkG.create( (o) => {
+        o.transform = new transformList( new translate(700,200), new rotate(-30) )
         o.addChild( SkRect.create( o => {
             o.bounds = new bounds( 0, 0, 400, 200 );
             o.rx = 50
