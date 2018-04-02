@@ -24,6 +24,41 @@ export class bounds implements stringifiable {
 }
 
 export interface transform extends stringifiable {}
+export class translate implements transform {
+    readonly x : number
+    readonly y : number
+
+    constructor( x : number, y? : number ) {
+        this.x = x
+        this.y = y
+    }
+
+    asString() : string {
+        if( this.y ) {
+            return `translate(${this.x} ${this.y})`
+        }
+        return `translate(${this.x})`
+    }
+}
+
+export class rotate implements transform {
+    readonly angle : number
+    readonly cx : number
+    readonly cy : number
+
+    constructor( angle : number, cx? : number, cy? : number ) {
+        this.angle = angle
+        this.cx = cx
+        this.cy = cy
+    }
+
+    asString() : string {
+        if( this.cx && this.cy ) {
+            return `rotate(${this.angle} ${this.cx} ${this.cy})`
+        }
+        return `rotate(${this.angle})`
+    }
+}
 
 export class transformList implements stringifiable {
     readonly transforms : transform[]
@@ -33,7 +68,7 @@ export class transformList implements stringifiable {
     }
 
     asString() : string {
-        return this.transforms.map( o => o.asString ).join(" ");
+        return this.transforms.map( o => o.asString() ).join(" ");
     }
 }
 
