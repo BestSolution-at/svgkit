@@ -8,5 +8,5 @@ console.log("Detected application", appMode);
 if( appMode == "rectangle" ) {
     startRectangle(node);
 } else if( appMode == "circle" ) {
-    startCircle();
+    startCircle(node);
 }
