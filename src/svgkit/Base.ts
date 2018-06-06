@@ -1,4 +1,4 @@
-import { coordinate, length, bounds, IShape, paint, INode, stringifiable, transformList, stringList, preserveAspectRatio, IGraphicsElement, ISvg, ISymbol, IG, IUse, IImage } from "./Types";
+import { coordinate, length, bounds, IShape, paint, INode, stringifiable, transformList, stringList, preserveAspectRatio, IGraphicsElement, ISvg, ISymbol, IG, IUse, IImage, boundsStruct } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
@@ -55,6 +55,23 @@ export class SkSvg extends SkNode {
         var e = document.createElementNS(SVG_NAMESPACE,"svg");
         e.setAttribute("xmlns:xlink",XLINK_NAMSPACE);
         var s = new SkSvg( e )
+        
+        if( parent ) {
+            parent.appendChild( s.domNode );
+        }
+        return s;
+    }
+
+    static from(struct : SkSvgStruct, parent? : Element) : SkSvg {
+        var e = document.createElementNS(SVG_NAMESPACE,"svg");
+        e.setAttribute("xmlns:xlink",XLINK_NAMSPACE);
+        var s = new SkSvg( e )
+
+        if( struct.x ) { s.x = struct.x }
+        if( struct.y ) { s.y = struct.y }
+        if( struct.bounds ) { s.bounds = bounds.from(struct.bounds) }
+        if( struct.viewBox ) { s.viewBox = bounds.from(struct.viewBox) }
+        if( struct.children ) { struct.children.forEach( s.addChild ) }
         
         if( parent ) {
             parent.appendChild( s.domNode );
@@ -121,9 +138,19 @@ export class SkSvg extends SkNode {
         this.height = bounds.height
     }
 
-    addChild( node : IShape ) {
+    addChild( node : INode ) {
         this.domNode.appendChild( node.domNode )
     }
+}
+
+export interface SkSvgStruct {
+    readonly x? : coordinate
+    readonly y? : coordinate
+    readonly bounds? : boundsStruct
+    readonly viewBox? : boundsStruct
+    readonly width? : length
+    readonly height? : length
+    readonly children? : INode[]
 }
 
 export class SkG extends SkNode {
@@ -195,6 +222,12 @@ export class SkDesc extends SkNode {
         return SkDesc.adapt(document.createElementNS(SVG_NAMESPACE,"desc"), init);
     }
 
+    static from( struct : SkDescStruct ) : SkDesc {
+        return SkDesc.create( o => {
+            o.text = struct.text
+        } )
+    }
+
     static adapt( element : Element, init? : ( obj : SkDesc ) => void) : SkDesc {
         var c = element["sk"];
         c = c ? c : new SkDesc(element)
@@ -208,6 +241,10 @@ export class SkDesc extends SkNode {
 
     get text() : string { return this.domNode.textContent }
     set text( text: string) { this.domNode.textContent = text }
+}
+
+export interface SkDescStruct {
+    text : string
 }
 
 export class SkTitle extends SkNode {

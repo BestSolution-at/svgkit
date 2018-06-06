@@ -42,6 +42,12 @@ export class SkRect extends SkNode implements IShape {
         return SkRect.adapt(document.createElementNS(SVG_NAMESPACE,"rect"), init);
     }
 
+    static from( struct : SkRectStruct ) : SkRect {
+        return SkRect.create( o => {
+
+        });
+    }
+
     static adapt( element : Element, init? : ( obj : SkRect ) => void) : SkRect {
         var c = element["sk"];
         c = c ? c : new SkRect(element)
@@ -105,7 +111,16 @@ export class SkRect extends SkNode implements IShape {
 
     get strokeWidth() : length { return attr( "stroke-width" ,this) }
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+}
 
+export interface SkRectStruct {
+    readonly x? : coordinate
+    readonly y? : coordinate
+    readonly width? : length
+    readonly height? : length
+    readonly fill? : paint
+    readonly stroke? : paint
+    readonly strokeWidth? : length
 }
 
 export class SkCircle extends SkNode {
@@ -164,6 +179,12 @@ export class SkEllipse extends SkNode {
         return SkEllipse.adapt(document.createElementNS(SVG_NAMESPACE,"ellipse"), init);
     }
 
+    static from( struct : SkEllipseStruct ) {
+        return SkEllipse.create( o => {
+            
+        } )
+    }
+
     static adapt( element : Element, init? : ( obj : SkEllipse ) => void) : SkEllipse {
         var c = element["sk"];
         c = c ? c : new SkEllipse(element)
@@ -210,6 +231,10 @@ export class SkEllipse extends SkNode {
 
     get strokeWidth() : length { return attr( "stroke-width" ,this) }
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+}
+
+export interface SkEllipseStruct {
+
 }
 
 export class SkLine extends SkNode {

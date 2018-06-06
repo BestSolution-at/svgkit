@@ -20,9 +20,20 @@ export class bounds implements stringifiable {
         this.height = height
     }
 
+    static from( struct : boundsStruct ) {
+        return new bounds( struct.x, struct.y, struct.width, struct.height )
+    }
+
     asString() : string {
         return this.x + " " + this.y + " " + this.width + " " + this.height
     }
+}
+
+export interface boundsStruct {
+    x : coordinate
+    y : coordinate
+    width : length
+    height : length
 }
 
 export interface transform extends stringifiable {}

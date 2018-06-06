@@ -1,4 +1,4 @@
-import { SkSvg, SkDesc, SkG } from "../../../svgkit/Base";
+import { SkSvg, SkDesc, SkG, SkSvgStruct } from "../../../svgkit/Base";
 import { bounds, translate, rotate, transform, transformList } from "../../../svgkit/Types";
 import { SkRect, SkEllipse } from "../../../svgkit/Shape";
 
