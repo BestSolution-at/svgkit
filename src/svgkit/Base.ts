@@ -191,7 +191,23 @@ export class SkDefs extends SkNode {
 }
 
 export class SkDesc extends SkNode {
-    // TODO
+    static create( init? : ( obj : SkDesc ) => void ) : SkDesc {
+        return SkDesc.adapt(document.createElementNS(SVG_NAMESPACE,"desc"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkDesc ) => void) : SkDesc {
+        var c = element["sk"];
+        c = c ? c : new SkDesc(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    get text() : string { return this.domNode.textContent }
+    set text( text: string) { this.domNode.textContent = text }
 }
 
 export class SkTitle extends SkNode {
