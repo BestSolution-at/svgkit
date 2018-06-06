@@ -145,6 +145,17 @@ export class SkCircle extends SkNode {
 
     get r() : string | length { return this.prop("r") }
     set r( r : string | length ) { this.prop("r",stringify(r)) }
+
+    // properties
+
+    get fill() : paint { return attr( "fill" ,this) }
+    set fill( fill : paint) { attr( "fill" , this, fill) }
+
+    get stroke() : paint { return attr( "stroke" ,this) }
+    set stroke( stroke : paint) { attr( "stroke" , this, stroke) }
+
+    get strokeWidth() : length { return attr( "stroke-width" ,this) }
+    set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
 }
 
 
@@ -164,30 +175,41 @@ export class SkEllipse extends SkNode {
         return c;
     }
 
-        // styling
-        get class() : string | stringList { return this.prop("class") }
-        set class( clazz : string | stringList ) { this.prop("class", clazz) }
-    
-        get style() : string { return this.prop("style") }
-        set style( style : string ) { this.prop("style", style) }
-    
-        get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
-        set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
-    
-        get transform() : transformList | string { return this.prop("transform") }
-        set transform( transform : transformList | string ) { this.prop("transform",transform) }
-        
-        get cx() : string | coordinate { return this.prop("cx") }
-        set cx( cx : string | coordinate ) { this.prop("cx",stringify(cx)) }
-    
-        get cy() : string | coordinate { return this.prop("cy") }
-        set cy( cy : string | coordinate ) { this.prop("cy",stringify(cy)) }
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
 
-        get rx() : string | coordinate { return this.prop("rx") }
-        set rx( rx : string | coordinate ) { this.prop("rx",stringify(rx)) }
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
     
-        get ry() : string | coordinate { return this.prop("ry") }
-        set ry( ry : string | coordinate ) { this.prop("ry",stringify(ry)) }
+    get cx() : string | coordinate { return this.prop("cx") }
+    set cx( cx : string | coordinate ) { this.prop("cx",stringify(cx)) }
+
+    get cy() : string | coordinate { return this.prop("cy") }
+    set cy( cy : string | coordinate ) { this.prop("cy",stringify(cy)) }
+
+    get rx() : string | coordinate { return this.prop("rx") }
+    set rx( rx : string | coordinate ) { this.prop("rx",stringify(rx)) }
+
+    get ry() : string | coordinate { return this.prop("ry") }
+    set ry( ry : string | coordinate ) { this.prop("ry",stringify(ry)) }
+
+    // properties
+
+    get fill() : paint { return attr( "fill" ,this) }
+    set fill( fill : paint) { attr( "fill" , this, fill) }
+
+    get stroke() : paint { return attr( "stroke" ,this) }
+    set stroke( stroke : paint) { attr( "stroke" , this, stroke) }
+
+    get strokeWidth() : length { return attr( "stroke-width" ,this) }
+    set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
 }
 
 export class SkLine extends SkNode {
