@@ -63,6 +63,9 @@ export class SkRect extends SkNode implements IShape {
     get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
     set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
 
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
     get x() : coordinate { return this.prop("x") }
     set x( x : coordinate ) { this.prop("x", stringify(x) ) }
 
@@ -131,6 +134,9 @@ export class SkCircle extends SkNode {
     get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
     set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
 
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
     get cx() : string | coordinate { return this.prop("cx") }
     set cx( cx : string | coordinate ) { this.prop("cx",stringify(cx)) }
 
@@ -139,4 +145,89 @@ export class SkCircle extends SkNode {
 
     get r() : string | length { return this.prop("r") }
     set r( r : string | length ) { this.prop("r",stringify(r)) }
+}
+
+
+export class SkEllipse extends SkNode {
+    static create( init? : ( obj : SkEllipse ) => void ) : SkEllipse {
+        return SkEllipse.adapt(document.createElementNS(SVG_NAMESPACE,"ellipse"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkEllipse ) => void) : SkEllipse {
+        var c = element["sk"];
+        c = c ? c : new SkEllipse(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+        // styling
+        get class() : string | stringList { return this.prop("class") }
+        set class( clazz : string | stringList ) { this.prop("class", clazz) }
+    
+        get style() : string { return this.prop("style") }
+        set style( style : string ) { this.prop("style", style) }
+    
+        get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+        set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+    
+        get transform() : transformList | string { return this.prop("transform") }
+        set transform( transform : transformList | string ) { this.prop("transform",transform) }
+        
+        get cx() : string | coordinate { return this.prop("cx") }
+        set cx( cx : string | coordinate ) { this.prop("cx",stringify(cx)) }
+    
+        get cy() : string | coordinate { return this.prop("cy") }
+        set cy( cy : string | coordinate ) { this.prop("cy",stringify(cy)) }
+
+        get rx() : string | coordinate { return this.prop("rx") }
+        set rx( rx : string | coordinate ) { this.prop("rx",stringify(rx)) }
+    
+        get ry() : string | coordinate { return this.prop("ry") }
+        set ry( ry : string | coordinate ) { this.prop("ry",stringify(ry)) }
+}
+
+export class SkLine extends SkNode {
+    static create( init? : ( obj : SkLine ) => void ) : SkLine {
+        return SkLine.adapt(document.createElementNS(SVG_NAMESPACE,"line"), init);
+    }
+
+    static adapt( element : Element, init? : ( obj : SkLine ) => void) : SkLine {
+        var c = element["sk"];
+        c = c ? c : new SkLine(element)
+
+        if( init ) {
+            init.call( null, c)
+        }
+
+        return c;
+    }
+
+    // styling
+    get class() : string | stringList { return this.prop("class") }
+    set class( clazz : string | stringList ) { this.prop("class", clazz) }
+
+    get style() : string { return this.prop("style") }
+    set style( style : string ) { this.prop("style", style) }
+
+    get externalResourcesRequired() : boolean { return Boolean(this.prop("externalResourcesRequired")) }
+    set externalResourcesRequired( externalResourcesRequired : boolean ) { this.prop("externalResourcesRequired", String(externalResourcesRequired)) }
+
+    get transform() : transformList | string { return this.prop("transform") }
+    set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
+    get x1() : string | coordinate { return this.prop("x1") }
+    set x1( x1 : string | coordinate ) { this.prop("x1",stringify(x1)) }
+
+    get y1() : string | coordinate { return this.prop("y1") }
+    set y1( y1 : string | coordinate ) { this.prop("y1",stringify(y1)) }
+
+    get x2() : string | coordinate { return this.prop("x2") }
+    set x2( x2 : string | coordinate ) { this.prop("x2",stringify(x2)) }
+
+    get y2() : string | coordinate { return this.prop("y2") }
+    set y2( y2 : string | coordinate ) { this.prop("y2",stringify(y2)) }
 }
