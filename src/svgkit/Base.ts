@@ -144,6 +144,7 @@ export class SkSvg extends SkNode {
 }
 
 export interface SkSvgStruct {
+    type : "svg"
     readonly x? : coordinate
     readonly y? : coordinate
     readonly bounds? : boundsStruct
@@ -185,6 +186,10 @@ export class SkG extends SkNode {
     addChild( node : IShape ) {
         this.domNode.appendChild( node.domNode )
     }
+}
+
+export interface SkGStruct {
+    type : "g"
 }
 
 export class SkDefs extends SkNode {

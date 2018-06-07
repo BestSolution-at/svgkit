@@ -114,6 +114,7 @@ export class SkRect extends SkNode implements IShape {
 }
 
 export interface SkRectStruct {
+    type : "rect"
     readonly x? : coordinate
     readonly y? : coordinate
     readonly width? : length
@@ -234,7 +235,7 @@ export class SkEllipse extends SkNode {
 }
 
 export interface SkEllipseStruct {
-
+    type : "ellipse"
 }
 
 export class SkLine extends SkNode {

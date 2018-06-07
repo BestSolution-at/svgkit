@@ -1,4 +1,5 @@
-import { stringify } from "./Base";
+import { stringify, SkSvgStruct, SkGStruct } from "./Base";
+import { SkEllipseStruct, SkRectStruct } from "./Shape";
 
 export type length = number | string
 export type coordinate = length
@@ -206,3 +207,5 @@ export interface IG extends INode {}
 export interface IUse extends INode {}
 export interface IImage extends INode {}
 export interface IShape extends INode, IGraphicsElement {}
+
+type SkNodeStruct = SkEllipseStruct | SkRectStruct | SkSvgStruct | SkGStruct
