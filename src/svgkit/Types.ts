@@ -18,8 +18,8 @@ export class bounds implements stringifiable {
         this.height = height
     }
 
-    static from( struct : boundsStruct ) {
-        return new bounds( struct.x, struct.y, struct.width, struct.height )
+    static from( data : T_bounds ) {
+        return new bounds( data.x, data.y, data.width, data.height )
     }
 
     asString() : string {
@@ -27,14 +27,16 @@ export class bounds implements stringifiable {
     }
 }
 
-export interface boundsStruct {
-    x : coordinate
-    y : coordinate
-    width : length
-    height : length
+export interface T_bounds {
+    type : "bounds"
+    readonly x : coordinate
+    readonly y : coordinate
+    readonly width : length
+    readonly height : length
 }
 
 export interface transform extends stringifiable {}
+
 export class translate implements transform {
     readonly x : number
     readonly y : number
@@ -42,6 +44,10 @@ export class translate implements transform {
     constructor( x : number, y? : number ) {
         this.x = x
         this.y = y
+    }
+
+    static from( data : T_translate ) {
+        return new translate( data.x, data.y);
     }
 
     asString() : string {
@@ -52,7 +58,13 @@ export class translate implements transform {
     }
 }
 
-export class rotate implements transform {
+export interface T_translate {
+    type : "translate"
+    readonly x : number
+    readonly y? : number
+ } 
+ 
+ export class rotate implements transform {
     readonly angle : number
     readonly cx : number
     readonly cy : number
@@ -63,12 +75,23 @@ export class rotate implements transform {
         this.cy = cy
     }
 
+    static from( data : T_rotate ) {
+        return new rotate( data.angle, data.cx, data.cy );
+    }
+
     asString() : string {
         if( this.cx && this.cy ) {
             return `rotate(${this.angle} ${this.cx} ${this.cy})`
         }
         return `rotate(${this.angle})`
     }
+}
+
+export interface T_rotate {
+    type : "rotate"
+    readonly angle : number
+    readonly cx? : number
+    readonly cy? : number
 }
 
 export class matrix implements transform {
@@ -88,9 +111,23 @@ export class matrix implements transform {
         this.f = f;
     }
 
+    static from( data : T_matrix ) {
+        return new matrix( data.a, data.b, data.c, data.d, data.e, data.f );
+    }
+
     asString() : string {
         return `matrix(${this.a} ${this.b} ${this.c} ${this.d} ${this.e} ${this.f})`
     }
+}
+
+export interface T_matrix {
+    type : "matrix"
+    readonly a : number
+    readonly b : number
+    readonly c : number
+    readonly d : number
+    readonly e : number
+    readonly f : number
 }
 
 export class scale implements transform {
@@ -102,6 +139,10 @@ export class scale implements transform {
         this.sy = sy
     }
 
+    static from( data : T_scale ) {
+        return new scale( data.sx, data.sy );
+    }
+
     asString() : string {
         if( this.sy ) {
             return `scale(${this.sx} ${this.sy})`
@@ -110,15 +151,30 @@ export class scale implements transform {
     }
 }
 
+export interface T_scale {
+    type : "scale"
+    readonly sx : number
+    readonly sy? : number
+}
+
 export class skewX implements transform {
     readonly skewX : number
     constructor( skewX : number ) {
         this.skewX = skewX
     }
 
+    static from( data : T_skewX ) {
+        return new skewX( data.skewX );
+    }
+
     asString() : string {
         return `skewX(${this.skewX})`
     }
+}
+
+export interface T_skewX {
+    type : "skewX"
+    readonly skewX : number
 }
 
 export class skewY implements transform {
@@ -127,9 +183,18 @@ export class skewY implements transform {
         this.skewY = skewY
     }
 
+    static from( data : T_skewY ) {
+        return new skewY( data.skewY )
+    }
+
     asString() : string {
         return `skewY(${this.skewY})`
     }
+}
+
+export interface T_skewY {
+    type : "skewY"
+    readonly skewY : number
 }
 
 export class transformList implements stringifiable {
@@ -139,9 +204,24 @@ export class transformList implements stringifiable {
         this.transforms = transforms;
     }
 
+    static from( data : T_transformList ) {
+        let rv = new transformList()
+        data.transforms.map( transformList.toTransform ).forEach( t => rv.transforms.push(t) )
+        return rv;
+    }
+
+    private static toTransform( t : T_transform) : transform {
+        return _t(t)
+    }
+
     asString() : string {
         return this.transforms.map( o => o.asString() ).join(" ");
     }
+}
+
+export interface T_transformList {
+    type : "transformList"
+    readonly transforms : T_transform[]
 }
 
 export class stringList implements stringifiable {
@@ -187,5 +267,23 @@ export class preserveAspectRatio implements stringifiable {
             return `${this.align} ${this.meetOrSlice}`
         }
         return `defer ${this.align} ${this.meetOrSlice}`
+    }
+}
+
+export type T_type = T_bounds | T_matrix | T_rotate | T_scale | T_skewX | T_skewY | T_transformList | T_translate;
+
+
+export type T_transform = T_matrix | T_rotate | T_scale | T_skewX | T_skewY
+
+export function _t( data :  T_type ) {
+    switch( data.type ) {
+        case "bounds": return bounds.from( data )
+        case "matrix": return matrix.from( data )
+        case "rotate": return rotate.from( data )
+        case "scale": return scale.from( data )
+        case "skewX": return skewX.from( data )
+        case "skewY": return skewY.from( data )
+        /*case "transformList" : return transformList.from( data )*/
+        case "translate": return translate.from( data )
     }
 }
