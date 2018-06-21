@@ -211,7 +211,7 @@ export class transformList implements stringifiable {
     }
 
     private static toTransform( t : T_transform) : transform {
-        return _t(t)
+        return $T(t)
     }
 
     asString() : string {
@@ -262,6 +262,10 @@ export class preserveAspectRatio implements stringifiable {
         this.meetOrSlice = meetOrSlice ? meetOrSlice : "meet"
     }
 
+    static from( data : T_preserveAspectRatio ) {
+        return new preserveAspectRatio( data.align, data.meetOrSlice, data.defer );
+    }
+
     asString() : string {
         if( this.defer ) {
             return `${this.align} ${this.meetOrSlice}`
@@ -270,12 +274,20 @@ export class preserveAspectRatio implements stringifiable {
     }
 }
 
-export type T_type = T_bounds | T_matrix | T_rotate | T_scale | T_skewX | T_skewY | T_transformList | T_translate;
+export interface T_preserveAspectRatio {
+    type : "preserveAspectRatio"
+    readonly defer : boolean
+    readonly align : PreserveAspectRatioAlign
+    readonly meetOrSlice : "meet" | "slice"
+}
+
+export type T_type = T_bounds | T_preserveAspectRatio
+    | T_matrix | T_rotate | T_scale | T_skewX | T_skewY | T_transformList | T_translate;
 
 
 export type T_transform = T_matrix | T_rotate | T_scale | T_skewX | T_skewY
 
-export function _t( data :  T_type ) {
+export function $T( data :  T_type ) {
     switch( data.type ) {
         case "bounds": return bounds.from( data )
         case "matrix": return matrix.from( data )
@@ -283,7 +295,8 @@ export function _t( data :  T_type ) {
         case "scale": return scale.from( data )
         case "skewX": return skewX.from( data )
         case "skewY": return skewY.from( data )
-        /*case "transformList" : return transformList.from( data )*/
+        case "transformList" : return transformList.from( data )
         case "translate": return translate.from( data )
+        case "preserveAspectRatio" : return preserveAspectRatio.from( data )
     }
 }
