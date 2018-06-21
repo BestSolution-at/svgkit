@@ -1,13 +1,12 @@
-import { SkSvg, SkG } from "../../../svgkit/Base";
-import { SkRect } from "../../../svgkit/Shape";
 import { bounds, transformList, translate, rotate } from "../../../svgkit/Types";
+import { SkSvg, SkRect, SkG } from "../../../svgkit/SvgKit";
 
 export function startRectangle(element : Element) {
     console.log("launch rectangle");
     var svg = SkSvg.create(element);
     svg.bounds  = new bounds( 1, 1, "12cm", "4cm" )
     svg.viewBox = new bounds( 0, 0, 1200, 400 )
-
+ 
     svg.addChild( SkRect.create( o => {
         o.bounds = new bounds( 1, 1, 1198, 398)
         o.fill = "none"

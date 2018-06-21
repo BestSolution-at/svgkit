@@ -1,6 +1,3 @@
-import { stringify, SkSvgStruct, SkGStruct } from "./Base";
-import { SkEllipseStruct, SkRectStruct } from "./Shape";
-
 export type length = number | string
 export type coordinate = length
 
@@ -192,20 +189,3 @@ export class preserveAspectRatio implements stringifiable {
         return `defer ${this.align} ${this.meetOrSlice}`
     }
 }
-
-export interface INode {
-    readonly domNode : Element
-    
-    id( id? : string ) : string 
-    prop( name : string, value? : string ) : string
-}
-
-export interface IGraphicsElement extends INode {}
-export interface ISvg extends INode {}
-export interface ISymbol extends INode {}
-export interface IG extends INode {}
-export interface IUse extends INode {}
-export interface IImage extends INode {}
-export interface IShape extends INode, IGraphicsElement {}
-
-type SkNodeStruct = SkEllipseStruct | SkRectStruct | SkSvgStruct | SkGStruct

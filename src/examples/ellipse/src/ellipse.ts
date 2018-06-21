@@ -1,6 +1,5 @@
-import { SkSvg, SkDesc, SkG, SkSvgStruct } from "../../../svgkit/Base";
 import { bounds, translate, rotate, transform, transformList } from "../../../svgkit/Types";
-import { SkRect, SkEllipse } from "../../../svgkit/Shape";
+import { SkSvg, SkDesc, SkRect, SkG, SkEllipse } from "../../../svgkit/SvgKit";
 
 export function startEllipse(element : Element) {
     console.log("start ellipse example")

@@ -1,9 +1,9 @@
-import { SkSvg, SkDesc } from "../../../svgkit/Base";
 import { bounds } from "../../../svgkit/Types";
-import { SkCircle, SkRect } from "../../../svgkit/Shape";
+import { SkSvg, SkDesc, SkRect, SkCircle } from "../../../svgkit/SvgKit";
 
 export function startCircle(element : Element) {
     console.log("Start circle sample");
+
     var svg = SkSvg.create(element);
     svg.bounds  = new bounds( 1, 1, "12cm", "4cm" )
     svg.viewBox = new bounds( 0, 0, 1200, 400 )
