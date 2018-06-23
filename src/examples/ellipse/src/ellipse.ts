@@ -1,5 +1,5 @@
 import { bounds, translate, rotate, transform, transformList } from "../../../svgkit/Types";
-import { SkSvg, SkDesc, SkRect, SkG, SkEllipse } from "../../../svgkit/SvgKit";
+import { SkSvg, SkDesc, SkRect, SkG, SkEllipse, S_SkSvg } from "../../../svgkit/SvgKit";
 
 export function startEllipse(element : Element) {
     console.log("start ellipse example")
@@ -35,4 +35,63 @@ export function startEllipse(element : Element) {
         o.strokeWidth = 20;
         o.transform = new transformList( new translate(900,200), new rotate(-20))
     } ) )
+
+    element.appendChild( document.createElement("br") )
+
+    // ------------
+    let data : S_SkSvg
+    data = {
+        type : "svg",
+        bounds : { type : "bounds", x : 1, y : 1, width : "12cm", height : "4cm" },
+        viewBox : { type : "bounds", x : 0, y : 0, width : 1200, height : 400 },
+        children : [
+            {
+                type : "desc", text : "Example ellipse01 - examples of ellipses"
+            },
+            {
+                type : "rect",
+                x : 1,
+                y : 1,
+                width : 1198,
+                height : 398,
+                fill : "none",
+                stroke : "blue",
+                strokeWidth : 2
+            },
+            {
+                type : "g",
+                transform : [
+                    { type : "translate", x : 300, y : 200 }
+                ],
+                children : [
+                    {
+                        type : "ellipse",
+                        rx : 250,
+                        ry : 100,
+                        fill : "red"
+                    },
+                ]
+            },
+            {
+                type : "ellipse",
+                rx : 250,
+                ry : 100,
+                fill : "none",
+                stroke : "blue",
+                strokeWidth : 20,
+                transform : [
+                    {
+                        type : "translate",
+                        x : 900,
+                        y : 200
+                    },
+                    {
+                        type : "rotate",
+                        angle : -20
+                    }
+                ]
+            }
+        ]
+    }
+    SkSvg.from(data,element)
 }

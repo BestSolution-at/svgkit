@@ -265,12 +265,19 @@ export class SkDesc extends SkNode {
         return c;
     }
 
+    static from( data : S_SkDesc ) {
+        return SkDesc.create( o => {
+            if( data.text ) o.text = data.text
+        } )
+    }
+
     get text() : string { return this.domNode.textContent }
     set text( text: string) { this.domNode.textContent = text }
 }
 
 export interface S_SkDesc {
-    type : "desc"
+    type : "desc",
+    text? : string
 }
 
 export class SkTitle extends SkNode {
@@ -482,10 +489,11 @@ export class SkRect extends SkNode implements IShape {
             if( data.width ) o.width = data.width
             if( data.height ) o.height = data.height
             if( data.rx ) o.rx = data.rx
-            if( data.height ) o.ry = data.ry
+            if( data.ry ) o.ry = data.ry
             if( data.fill ) o.fill = data.fill
             if( data.stroke ) o.stroke = data.stroke
             if( data.strokeWidth ) o.strokeWidth = data.strokeWidth
+            if( data.transform ) o.transform = transformList.fromArray( data.transform.map($T) )
         } );
     }
 
@@ -555,6 +563,7 @@ export interface S_SkRect {
     fill? : paint,
     stroke? : paint,
     strokeWidth? : length
+    transform? : T_transform[]
 }
 
 export class SkCircle extends SkNode {
@@ -627,6 +636,19 @@ export class SkEllipse extends SkNode {
         return c;
     }
 
+    static from( data : S_SkEllipse ) {
+        return SkEllipse.create( o => {
+            if( data.cx ) o.cx = data.cx
+            if( data.cy ) o.cy = data.cy
+            if( data.rx ) o.rx = data.rx
+            if( data.ry ) o.ry = data.ry
+            if( data.fill ) o.fill = data.fill
+            if( data.stroke ) o.stroke = data.stroke
+            if( data.strokeWidth ) o.strokeWidth = data.strokeWidth
+            if( data.transform ) o.transform = transformList.fromArray( data.transform.map($T) )
+        } )
+    }
+
     // styling
     get class() : string | stringList { return this.prop("class") }
     set class( clazz : string | stringList ) { this.prop("class", clazz) }
@@ -665,7 +687,15 @@ export class SkEllipse extends SkNode {
 }
 
 export interface S_SkEllipse {
-    type : "ellipse"
+    type : "ellipse",
+    cx? : coordinate,
+    cy? : coordinate,
+    rx? : coordinate,
+    ry? : coordinate,
+    fill? : paint,
+    stroke? : paint,
+    strokeWidth? : length,
+    transform? : T_transform[]
 }
 
 export class SkLine extends SkNode {
@@ -725,8 +755,8 @@ export function $S( data : S_type) {
     switch(data.type) {
         case "circle": return null;
         case "defs": return null;
-        case "desc": return null;
-        case "ellipse": return null;
+        case "desc": return SkDesc.from(data)
+        case "ellipse": return SkEllipse.from(data)
         case "g": return SkG.from(data)
         case "image": return null;
         case "line": return null;
