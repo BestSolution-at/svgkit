@@ -1,8 +1,9 @@
 import { bounds, transformList, translate, rotate } from "../../../svgkit/Types";
-import { SkSvg, SkRect, SkG } from "../../../svgkit/SvgKit";
+import { SkSvg, SkRect, SkG, S_SkSvg } from "../../../svgkit/SvgKit";
 
 export function startRectangle(element : Element) {
     console.log("launch rectangle");
+    // ---------------------
     var svg = SkSvg.create(element);
     svg.bounds  = new bounds( 1, 1, "12cm", "4cm" )
     svg.viewBox = new bounds( 0, 0, 1200, 400 )
@@ -46,4 +47,53 @@ export function startRectangle(element : Element) {
             o.strokeWidth = 30;
         }) )
     }) )
+
+    element.appendChild( document.createElement("br") )
+
+    // ---------------------
+    var data : S_SkSvg
+    data = {
+        type : "svg",
+        bounds : { type : "bounds", x : 1, y : 1, width : "12cm", height : "4cm" },
+        viewBox : { type: "bounds", x : 0, y : 0, width : 1200, height : 400 },
+        children : [
+            { 
+                type : "rect",
+                bounds : { type : "bounds", x : 1, y : 1, width : 1198, height : 398 },
+                fill : "none",
+                stroke : "blue",
+                strokeWidth : 2
+            },
+            {
+                type : "rect",
+                bounds : { type : "bounds", x : 400, y : 100, width : 400, height : 200 },
+                fill : "yellow",
+                stroke : "navy",
+                strokeWidth : 10
+            }
+        ]
+    }
+    SkSvg.from(data, element);
+
+    data = {
+        type : "svg",
+        bounds : { type : "bounds", x : 1, y : 1, width : "12cm", height : "4cm" },
+        viewBox : { type: "bounds", x : 0, y : 0, width : 1200, height : 400 },
+        children : [
+            { 
+                type : "rect",
+                bounds : { type : "bounds", x : 1, y : 1, width : 1198, height : 398 },
+                fill : "none",
+                stroke : "blue",
+                strokeWidth : 2
+            },
+            {
+                type : "rect",
+                bounds : { type : "bounds", x : 100, y : 100, width : 400, height : 200 },
+                fill : "green",
+                rx : 50
+            }
+        ]
+    }
+    SkSvg.from(data, element);
 }

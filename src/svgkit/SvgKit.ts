@@ -1,4 +1,4 @@
-import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList } from "./Types";
+import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
@@ -81,6 +81,20 @@ export class SkSvg extends SkNode {
         return new SkSvg( domNode );
     }
 
+    static from( data : S_SkSvg, parent? : Element ) : SkSvg {
+        let rv = SkSvg.create(parent);
+        if( data.bounds ) rv.bounds = bounds.from(data.bounds);
+        if( data.x ) rv.x = data.x
+        if( data.y ) rv.y = data.y
+        if( data.width ) rv.width = data.width
+        if( data.height ) rv.height = data.height
+        if( data.viewBox ) rv.viewBox = bounds.from( data.viewBox )
+        if( data.children ) {
+            data.children.map($S).forEach( t => rv.addChild(t) )
+        }
+        return rv;
+    }
+
     // styling
     get class() : string | stringList { return this.prop("class") }
     set class( clazz : string | stringList ) { this.prop("class", clazz) }
@@ -141,6 +155,17 @@ export class SkSvg extends SkNode {
     }
 }
 
+export interface S_SkSvg {
+    type : "svg"
+    bounds? : T_bounds
+    x? : coordinate
+    y? : coordinate
+    width? : length
+    height? : length
+    viewBox? : T_bounds
+    children? : S_type[]
+}
+
 export class SkG extends SkNode {
     static create( init? : ( obj : SkG ) => void ) : SkG {
         return SkG.adapt(document.createElementNS(SVG_NAMESPACE,"g"), init);
@@ -175,6 +200,10 @@ export class SkG extends SkNode {
     }
 }
 
+export interface S_SkG {
+    type : "g"
+}
+
 export class SkDefs extends SkNode {
     static create( init? : ( obj : SkDefs ) => void ) : SkDefs {
         return SkDefs.adapt(document.createElementNS(SVG_NAMESPACE,"defs"), init);
@@ -205,15 +234,13 @@ export class SkDefs extends SkNode {
     set transform( transform : transformList | string ) { this.prop("transform",transform) }
 }
 
+export interface S_SkDefs {
+    type : "defs"
+}
+
 export class SkDesc extends SkNode {
     static create( init? : ( obj : SkDesc ) => void ) : SkDesc {
         return SkDesc.adapt(document.createElementNS(SVG_NAMESPACE,"desc"), init);
-    }
-
-    static from( struct : SkDescStruct ) : SkDesc {
-        return SkDesc.create( o => {
-            o.text = struct.text
-        } )
     }
 
     static adapt( element : Element, init? : ( obj : SkDesc ) => void) : SkDesc {
@@ -231,12 +258,16 @@ export class SkDesc extends SkNode {
     set text( text: string) { this.domNode.textContent = text }
 }
 
-export interface SkDescStruct {
-    text : string
+export interface S_SkDesc {
+    type : "desc"
 }
 
 export class SkTitle extends SkNode {
     // TODO
+}
+
+export interface S_SkTitle {
+    type : "title"
 }
 
 export class SkSymbol extends SkNode {
@@ -270,6 +301,10 @@ export class SkSymbol extends SkNode {
 
     get preserveAspectRatio() : string | preserveAspectRatio { return this.prop("preserveAspectRatio") }
     set preserveAspectRatio( preserveAspectRatio : string | preserveAspectRatio ) { this.prop("preserveAspectRatio", preserveAspectRatio) }
+}
+
+export interface S_SkSymbol {
+    type : "symbol"
 }
 
 export class SkUse extends SkNode {
@@ -326,6 +361,10 @@ export class SkUse extends SkNode {
     }
 }
 
+export interface S_SkUse {
+    type : "use"
+}
+
 export class SkImage extends SkNode implements IImage {
     // styling
     get class() : string | stringList { return this.prop("class") }
@@ -356,17 +395,21 @@ export class SkImage extends SkNode implements IImage {
     }
 }
 
+export interface S_SkImage {
+    type : "image"
+}
+
 export class SkSwitch {
 
 }
 
-export class Style {
-
+export interface S_SkSwitch {
+    type : "switch"
 }
 
 export class SkPath extends SkNode {
     static create( init? : ( obj : SkPath ) => void ) : SkPath {
-        return SkPath.adapt(document.createElementNS(SVG_NAMESPACE,"rect"), init);
+        return SkPath.adapt(document.createElementNS(SVG_NAMESPACE,"path"), init);
     }
 
     static adapt( element : Element, init? : ( obj : SkPath ) => void) : SkPath {
@@ -400,6 +443,10 @@ export class SkPath extends SkNode {
     set pathLength( pathLength : string ) { this.prop("pathLength",pathLength) } 
 }
 
+export interface S_SkPath {
+    type : "path"
+}
+
 export class SkRect extends SkNode implements IShape {
     static create( init? : ( obj : SkRect ) => void ) : SkRect {
         return SkRect.adapt(document.createElementNS(SVG_NAMESPACE,"rect"), init);
@@ -414,6 +461,21 @@ export class SkRect extends SkNode implements IShape {
         }
 
         return c;
+    }
+
+    static from( data : S_SkRect ) {
+        return SkRect.create( o => {
+            if( data.bounds ) o.bounds = bounds.from( data.bounds )
+            if( data.x ) o.x = data.x
+            if( data.y ) o.y = data.y
+            if( data.width ) o.width = data.width
+            if( data.height ) o.height = data.height
+            if( data.rx ) o.rx = data.rx
+            if( data.height ) o.ry = data.ry
+            if( data.fill ) o.fill = data.fill
+            if( data.stroke ) o.stroke = data.stroke
+            if( data.strokeWidth ) o.strokeWidth = data.strokeWidth
+        } );
     }
 
     // styling
@@ -470,6 +532,20 @@ export class SkRect extends SkNode implements IShape {
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
 }
 
+export interface S_SkRect {
+    type : "rect"
+    bounds? : T_bounds
+    x? : coordinate
+    y? : coordinate
+    width? : length
+    height? : length
+    rx? : length
+    ry? : length,
+    fill? : paint,
+    stroke? : paint,
+    strokeWidth? : length
+}
+
 export class SkCircle extends SkNode {
     static create( init? : ( obj : SkCircle ) => void ) : SkCircle {
         return SkCircle.adapt(document.createElementNS(SVG_NAMESPACE,"circle"), init);
@@ -518,6 +594,10 @@ export class SkCircle extends SkNode {
 
     get strokeWidth() : length { return attr( "stroke-width" ,this) }
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+}
+
+export interface S_SkCircle {
+    type : "circle"
 }
 
 export class SkEllipse extends SkNode {
@@ -573,6 +653,10 @@ export class SkEllipse extends SkNode {
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
 }
 
+export interface S_SkEllipse {
+    type : "ellipse"
+}
+
 export class SkLine extends SkNode {
     static create( init? : ( obj : SkLine ) => void ) : SkLine {
         return SkLine.adapt(document.createElementNS(SVG_NAMESPACE,"line"), init);
@@ -615,8 +699,34 @@ export class SkLine extends SkNode {
     set y2( y2 : string | coordinate ) { this.prop("y2",stringify(y2)) }
 }
 
+export interface S_SkLine {
+    type : "line"
+}
 
-export function createSkNode( name : "rect" ) : SkRect;
+export type S_type = 
+    S_SkCircle  | S_SkDefs   | S_SkDesc  |
+    S_SkEllipse | S_SkG      | S_SkImage | 
+    S_SkLine    | S_SkPath   | S_SkRect  |
+    S_SkSvg     | S_SkSwitch | S_SkSymbol
+
+
+export function $S( data : S_type) {
+    switch(data.type) {
+        case "circle": return null;
+        case "defs": return null;
+        case "desc": return null;
+        case "ellipse": return null;
+        case "g": return null;
+        case "image": return null;
+        case "line": return null;
+        case "path": return null;
+        case "rect": return SkRect.from(data)
+        case "svg": return SkSvg.from(data)
+        case "switch": return null;
+        case "symbol": return null;
+    }
+}
+/*export function createSkNode( name : "rect" ) : SkRect;
 export function createSkNode( name : "circle" ) : SkCircle;
 
 export function createSkNode( name : string) : SkNode {
@@ -628,5 +738,5 @@ export function createSkNode( name : string) : SkNode {
     console.log("Unknown type '",name,"'");
     return null;
 }
-
+*/
 
