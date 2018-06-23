@@ -210,6 +210,12 @@ export class transformList implements stringifiable {
         return rv;
     }
 
+    static fromArray( transforms: transform[] ) {
+        let rv = new transformList()
+        transforms.forEach( t => rv.transforms.push(t) )
+        return rv;
+    }
+
     private static toTransform( t : T_transform) : transform {
         return $T(t)
     }
@@ -285,7 +291,7 @@ export type T_type = T_bounds | T_preserveAspectRatio
     | T_matrix | T_rotate | T_scale | T_skewX | T_skewY | T_transformList | T_translate;
 
 
-export type T_transform = T_matrix | T_rotate | T_scale | T_skewX | T_skewY
+export type T_transform = T_matrix | T_rotate | T_scale | T_skewX | T_skewY | T_translate
 
 export function $T( data :  T_type ) {
     switch( data.type ) {

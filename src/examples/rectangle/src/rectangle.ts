@@ -92,6 +92,23 @@ export function startRectangle(element : Element) {
                 bounds : { type : "bounds", x : 100, y : 100, width : 400, height : 200 },
                 fill : "green",
                 rx : 50
+            },
+            {
+                type : "g",
+                transform : [
+                    { type : "translate", x : 700, y : 200  },
+                    { type : "rotate", angle : -30 }
+                ],
+                children : [
+                    {
+                        type : "rect",
+                        bounds : { type : "bounds", x : 0, y : 0, width : 400, height : 200 },
+                        rx : 50,
+                        fill : "none",
+                        stroke : "purple",
+                        strokeWidth : 30
+                    }
+                ]
             }
         ]
     }

@@ -1,4 +1,4 @@
-import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds } from "./Types";
+import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds, T_transformList, $T, T_transform } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
@@ -182,6 +182,15 @@ export class SkG extends SkNode {
         return c;
     }
 
+    static from( data : S_SkG ) {
+        return SkG.create( o => {
+            if( data.transform ) o.transform = transformList.fromArray( data.transform.map($T) )
+            if( data.children ) {
+                data.children.map($S).forEach( e => o.addChild(e) )
+            }
+        });
+    }
+
     // styling
     get class() : string | stringList { return this.prop("class") }
     set class( clazz : string | stringList ) { this.prop("class", clazz) }
@@ -201,7 +210,9 @@ export class SkG extends SkNode {
 }
 
 export interface S_SkG {
-    type : "g"
+    type : "g",
+    transform? : T_transform[]
+    children? : S_type[]
 }
 
 export class SkDefs extends SkNode {
@@ -716,7 +727,7 @@ export function $S( data : S_type) {
         case "defs": return null;
         case "desc": return null;
         case "ellipse": return null;
-        case "g": return null;
+        case "g": return SkG.from(data)
         case "image": return null;
         case "line": return null;
         case "path": return null;
