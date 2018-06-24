@@ -45,50 +45,20 @@ export function startEllipse(element : Element) {
         bounds : { type : "bounds", x : 1, y : 1, width : "12cm", height : "4cm" },
         viewBox : { type : "bounds", x : 0, y : 0, width : 1200, height : 400 },
         children : [
-            {
-                type : "desc", text : "Example ellipse01 - examples of ellipses"
-            },
-            {
-                type : "rect",
-                x : 1,
-                y : 1,
-                width : 1198,
-                height : 398,
-                fill : "none",
-                stroke : "blue",
-                strokeWidth : 2
-            },
-            {
-                type : "g",
+            { type : "desc", text : "Example ellipse01 - examples of ellipses" },
+            { type : "rect", x : 1, y : 1, width : 1198, height : 398, fill : "none", stroke : "blue", strokeWidth : 2 },
+            { type : "g",
                 transform : [
                     { type : "translate", x : 300, y : 200 }
                 ],
                 children : [
-                    {
-                        type : "ellipse",
-                        rx : 250,
-                        ry : 100,
-                        fill : "red"
-                    },
+                    { type : "ellipse", rx : 250, ry : 100, fill : "red" },
                 ]
             },
-            {
-                type : "ellipse",
-                rx : 250,
-                ry : 100,
-                fill : "none",
-                stroke : "blue",
-                strokeWidth : 20,
+            { type : "ellipse", rx : 250, ry : 100, fill : "none", stroke : "blue", strokeWidth : 20,
                 transform : [
-                    {
-                        type : "translate",
-                        x : 900,
-                        y : 200
-                    },
-                    {
-                        type : "rotate",
-                        angle : -20
-                    }
+                    { type : "translate", x : 900, y : 200},
+                    { type : "rotate", angle : -20 }
                 ]
             }
         ]

@@ -1,5 +1,5 @@
 import { bounds } from "../../../svgkit/Types";
-import { SkSvg, SkDesc, SkRect, SkCircle } from "../../../svgkit/SvgKit";
+import { SkSvg, SkDesc, SkRect, SkCircle, S_SkSvg } from "../../../svgkit/SvgKit";
 
 export function startCircle(element : Element) {
     console.log("Start circle sample");
@@ -28,4 +28,19 @@ export function startCircle(element : Element) {
         o.stroke = "blue"
         o.strokeWidth = 10
     }) )
+
+    element.appendChild( document.createElement("br") )
+
+    // --------
+    let data : S_SkSvg
+    data = {
+        type : "svg",
+        bounds : { type : "bounds", x : 1, y : 1, width : "12cm", height : "4cm" },
+        viewBox : { type : "bounds", x : 0, y : 0, width : 1200, height : 400 },
+        children : [
+            { type : "desc", text : "Example circle01 - circle filled with red and stroked with blue" },
+            { type : "rect", x : 1, y : 1, width : 1198, height : 398, fill : "none", stroke : "blue", strokeWidth : 2 },
+            { type : "circle", cx : 600, cy : 200, fill : "red", stroke : "blue", strokeWidth : 10 }
+        ]
+    }
 }

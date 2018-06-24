@@ -582,6 +582,18 @@ export class SkCircle extends SkNode {
         return c;
     }
 
+    static from( data : S_SkCircle ) {
+        return SkCircle.create( o => {
+            if( data.cx ) o.cx = data.cx
+            if( data.cy ) o.cy = data.cy
+            if( data.r ) o.r = data.r
+            if( data.transform ) o.transform = transformList.fromArray( data.transform.map($T) )
+            if( data.fill ) o.fill = data.fill
+            if( data.stroke ) o.stroke = data.stroke
+            if( data.strokeWidth ) o.strokeWidth = data.strokeWidth
+        } )
+    }
+
     // styling
     get class() : string | stringList { return this.prop("class") }
     set class( clazz : string | stringList ) { this.prop("class", clazz) }
@@ -618,6 +630,13 @@ export class SkCircle extends SkNode {
 
 export interface S_SkCircle {
     type : "circle"
+    cx? : coordinate
+    cy? : coordinate
+    r? : length,
+    transform? : T_transform[]
+    fill? : paint
+    stroke? : paint
+    strokeWidth? : length
 }
 
 export class SkEllipse extends SkNode {
@@ -714,6 +733,16 @@ export class SkLine extends SkNode {
         return c;
     }
 
+    static from( data : S_SkLine ) {
+        return SkLine.create( o => {
+            if( data.x1 ) o.x1 = data.x1
+            if( data.x2 ) o.x2 = data.x2
+            if( data.y1 ) o.y1 = data.y1
+            if( data.y2 ) o.y2 = data.y2
+            if( data.transform ) o.transform = transformList.fromArray( data.transform.map($T) )
+        })
+    }
+
     // styling
     get class() : string | stringList { return this.prop("class") }
     set class( clazz : string | stringList ) { this.prop("class", clazz) }
@@ -741,7 +770,12 @@ export class SkLine extends SkNode {
 }
 
 export interface S_SkLine {
-    type : "line"
+    type : "line",
+    x1? : coordinate
+    y1? : coordinate
+    x2? : coordinate
+    y2? : coordinate
+    transform? : T_transform[]
 }
 
 export type S_type = 
@@ -753,13 +787,13 @@ export type S_type =
 
 export function $S( data : S_type) {
     switch(data.type) {
-        case "circle": return null;
+        case "circle": return SkCircle.from(data)
         case "defs": return null;
         case "desc": return SkDesc.from(data)
         case "ellipse": return SkEllipse.from(data)
         case "g": return SkG.from(data)
         case "image": return null;
-        case "line": return null;
+        case "line": return SkLine.from(data);
         case "path": return null;
         case "rect": return SkRect.from(data)
         case "svg": return SkSvg.from(data)
