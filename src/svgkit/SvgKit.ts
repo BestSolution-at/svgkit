@@ -458,7 +458,11 @@ export class SkPath extends SkNode {
     set d( d : string ) { this.prop("d",d) }
 
     get pathLength() : string { return this.prop("pathLength") }
-    set pathLength( pathLength : string ) { this.prop("pathLength",pathLength) } 
+    set pathLength( pathLength : string ) { this.prop("pathLength",pathLength) }
+
+    get fill() : paint { return attr( "fill" ,this) }
+    set fill( fill : paint) { attr( "fill" , this, fill) }
+
 }
 
 export interface S_SkPath {
