@@ -27,6 +27,13 @@ export class bounds implements stringifiable {
     }
 }
 
+export interface numericBounds {
+    readonly x : number
+    readonly y : number
+    readonly width : number
+    readonly height : number
+}
+
 export interface T_bounds {
     type : "bounds"
     readonly x : coordinate

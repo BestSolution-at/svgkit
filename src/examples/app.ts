@@ -1,7 +1,8 @@
 import { startRectangle } from "./rectangle/src/rectangle";
 import { startCircle } from "./circle/src/circle";
 import { startEllipse } from "./ellipse/src/ellipse";
-import { startRoundRectangle } from "./rounded-rect/round-rect";
+import { startRoundRectangle } from "./rounded-rect/src/round-rect";
+import { startRegion } from "./region/src/region";
 
 let node = document.getElementById('svgkit-app');
 let appMode = node!.getAttribute('data-app')
@@ -15,4 +16,6 @@ if( appMode == "rectangle" ) {
     startEllipse(node)
 } else if( appMode == "round-rectangle") {
     startRoundRectangle(node);
+} else if( appMode == "region" ) {
+    startRegion(node);
 }

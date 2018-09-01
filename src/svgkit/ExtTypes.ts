@@ -42,7 +42,6 @@ export class cornerRadii {
     }
 
     static of( topLeft : number, topRight : number, bottomRight : number, bottomLeft : number ) : cornerRadii {
-        console.log("Called");
         return { 
             topLeftHorizontalRadius: topLeft, topLeftVerticalRadius: topLeft,  
             topRightVerticalRadius: topRight, topRightHorizontalRadius: topRight,

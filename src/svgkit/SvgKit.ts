@@ -207,6 +207,10 @@ export class SkG extends SkNode {
     addChild( node : IShape ) {
         this.domNode.appendChild( node.domNode )
     }
+
+    removeChild( node : IShape ) {
+        this.domNode.removeChild( node.domNode )
+    }
 }
 
 export interface S_SkG {
