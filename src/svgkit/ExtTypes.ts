@@ -40,6 +40,16 @@ export class cornerRadii {
         this.bottomLeftVerticalRadius = bottomLeftVerticalRadius
         this.bottomLeftHorizontalRadius = bottomLeftHorizontalRadius
     }
+
+    static of( topLeft : number, topRight : number, bottomRight : number, bottomLeft : number ) : cornerRadii {
+        console.log("Called");
+        return { 
+            topLeftHorizontalRadius: topLeft, topLeftVerticalRadius: topLeft,  
+            topRightVerticalRadius: topRight, topRightHorizontalRadius: topRight,
+            bottomRightHorizontalRadius: bottomRight, bottomRightVerticalRadius: bottomRight,
+            bottomLeftVerticalRadius: bottomLeft, bottomLeftHorizontalRadius: bottomLeft
+        }
+    }
 }
 
 export class background {

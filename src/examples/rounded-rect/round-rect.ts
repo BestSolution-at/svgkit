@@ -18,7 +18,7 @@ export function startRoundRectangle(element : Element) {
     }) )
 
     svg.addChild( ExtSkRoundRect.create( o => {
-        o.cornerRadii = new cornerRadii(30,30,30,30,0,0,0,0);
+        o.cornerRadii = cornerRadii.of( 30, 30, 0, 0 );
         o.x = 10;
         o.y = 10;
         o.width = 350;
