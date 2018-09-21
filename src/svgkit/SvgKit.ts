@@ -1,4 +1,4 @@
-import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds, T_transformList, $T, T_transform, strokeLinejoin } from "./Types";
+import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds, T_transformList, $T, T_transform, strokeLinejoin, strokeLineCap } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
@@ -18,6 +18,7 @@ export function attr( name : "fill", element : IShape, value? : paint ) : paint;
 export function attr( name : "stroke", element : IShape, value? : paint ) : paint;
 export function attr( name : "stroke-width", element : IShape, value? : length ) : length;
 export function attr( name : "stroke-linejoin", element : IShape, value? : strokeLinejoin ) : strokeLinejoin;
+export function attr( name : "stroke-linecap", element : IShape, value? : strokeLineCap ) : strokeLineCap;
 export function attr( name : string, element : INode, value? : any ) : any {
     element.prop(name, String(value));
 }
@@ -204,6 +205,9 @@ export class SkG extends SkNode {
 
     get transform() : transformList | string { return this.prop("transform") }
     set transform( transform : transformList | string ) { this.prop("transform",transform) }
+
+    get stroke() : paint { return attr( "stroke" ,this) }
+    set stroke( stroke : paint) { attr( "stroke" , this, stroke) }
 
     addChild( node : IShape ) {
         this.domNode.appendChild( node.domNode )
@@ -561,6 +565,9 @@ export class SkRect extends SkNode implements IShape {
 
     get strokeLinejoin() : strokeLinejoin { return attr("stroke-linejoin",this) }
     set strokeLinejoin( strokeLinejoin :  strokeLinejoin) { attr("stroke-linejoin",this,strokeLinejoin); }
+
+    get strokeLineCap() : strokeLineCap { return attr("stroke-linecap",this) }
+    set strokeLineCap( strokeLineCap : strokeLineCap ) { attr("stroke-linecap",this,strokeLineCap) }
 }
 
 export interface S_SkRect {
@@ -715,6 +722,9 @@ export class SkEllipse extends SkNode {
 
     get strokeWidth() : length { return attr( "stroke-width" ,this) }
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+
+    get strokeLineCap() : strokeLineCap { return attr("stroke-linecap",this) }
+    set strokeLineCap( strokeLineCap : strokeLineCap ) { attr("stroke-linecap",this,strokeLineCap) }
 }
 
 export interface S_SkEllipse {
@@ -779,6 +789,15 @@ export class SkLine extends SkNode {
 
     get y2() : string | coordinate { return this.prop("y2") }
     set y2( y2 : string | coordinate ) { this.prop("y2",stringify(y2)) }
+
+    get stroke() : paint { return attr( "stroke" ,this) }
+    set stroke( stroke : paint) { attr( "stroke" , this, stroke) }
+
+    get strokeWidth() : length { return attr( "stroke-width" ,this) }
+    set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+
+    get strokeLineCap() : strokeLineCap { return attr("stroke-linecap",this) }
+    set strokeLineCap( strokeLineCap : strokeLineCap ) { attr("stroke-linecap",this,strokeLineCap) }
 }
 
 export interface S_SkLine {

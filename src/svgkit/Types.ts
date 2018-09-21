@@ -253,6 +253,10 @@ export enum strokeLinejoin {
     MITER="miter", ROUND="round", BEVEL="bevel"
 }
 
+export enum strokeLineCap {
+    BUTT="butt",  ROUND="round", SQUARE="square"
+}
+
 export type paint = string
 
 export enum PreserveAspectRatioAlign {

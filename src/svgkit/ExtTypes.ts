@@ -1,4 +1,4 @@
-import { paint, length, stringifiable } from "./Types";
+import { paint, length, stringifiable, strokeLinejoin } from "./Types";
 
 export class insets {
     readonly top : number
@@ -68,4 +68,30 @@ export class backgroundFill {
         this.paint = paint
         this.corderRadii = corderRadii
     }
+}
+
+export class border {
+    readonly borderStrokes : borderStroke[];
+
+    constructor(borderStrokes : borderStroke[]) {
+        this.borderStrokes = borderStrokes;
+    }
+}
+
+export class borderStroke {
+    readonly topStroke : paint;
+    readonly rightStroke : paint;
+    readonly bottomStroke : paint;
+    readonly leftStroke : paint;
+
+
+}
+
+export class borderStrokeStyle {
+    readonly type : strokeType;
+    readonly strokeLinejoin : strokeLinejoin;
+}
+
+export enum strokeType {
+    INSIDE, OUTSIDE, CENTERED
 }
