@@ -1,4 +1,4 @@
-import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds, T_transformList, $T, T_transform } from "./Types";
+import { coordinate, length, paint, stringifiable, stringList, bounds, preserveAspectRatio, transformList, T_bounds, T_transformList, $T, T_transform, strokeLinejoin } from "./Types";
 
 export var SVG_NAMESPACE = "http://www.w3.org/2000/svg"
 export var XLINK_NAMSPACE = "http://www.w3.org/1999/xlink"
@@ -17,6 +17,7 @@ export function stringify( v : any ) : string {
 export function attr( name : "fill", element : IShape, value? : paint ) : paint;
 export function attr( name : "stroke", element : IShape, value? : paint ) : paint;
 export function attr( name : "stroke-width", element : IShape, value? : length ) : length;
+export function attr( name : "stroke-linejoin", element : IShape, value? : strokeLinejoin ) : strokeLinejoin;
 export function attr( name : string, element : INode, value? : any ) : any {
     element.prop(name, String(value));
 }
@@ -557,6 +558,9 @@ export class SkRect extends SkNode implements IShape {
 
     get strokeWidth() : length { return attr( "stroke-width" ,this) }
     set strokeWidth( strokeWidth : length) { attr( "stroke-width" , this, strokeWidth) }
+
+    get strokeLinejoin() : strokeLinejoin { return attr("stroke-linejoin",this) }
+    set strokeLinejoin( strokeLinejoin :  strokeLinejoin) { attr("stroke-linejoin",this,strokeLinejoin); }
 }
 
 export interface S_SkRect {

@@ -1,4 +1,4 @@
-import { bounds, transformList, translate, rotate } from "../../../svgkit/Types";
+import { bounds, transformList, translate, rotate, strokeLinejoin } from "../../../svgkit/Types";
 import { SkSvg, SkRect, SkG, S_SkSvg } from "../../../svgkit/SvgKit";
 
 export function startRectangle(element : Element) {
@@ -113,4 +113,40 @@ export function startRectangle(element : Element) {
         ]
     }
     SkSvg.from(data, element);
+
+    element.appendChild( document.createElement("br") )
+
+    var svg = SkSvg.create(element);
+    svg.bounds  = new bounds( 1, 1, "16cm", "4cm" )
+    svg.viewBox = new bounds( 0, 0, 1600, 400 )
+    svg.addChild( SkRect.create( (o) => {
+        o.bounds = new bounds( 1, 1, 1598, 398)
+        o.fill = "none"
+        o.stroke = "blue"
+        o.strokeWidth = 2
+    }) )
+
+    svg.addChild( SkRect.create( o => {
+        o.bounds = new bounds( 100, 100, 400, 200)
+        o.fill = "white"
+        o.stroke = "blue"
+        o.strokeLinejoin = strokeLinejoin.ROUND;
+        o.strokeWidth = 20
+    }) )
+
+    svg.addChild( SkRect.create( o => {
+        o.bounds = new bounds( 600, 100, 400, 200)
+        o.fill = "white"
+        o.stroke = "blue"
+        o.strokeLinejoin = strokeLinejoin.MITER;
+        o.strokeWidth = 20
+    }) )
+
+    svg.addChild( SkRect.create( o => {
+        o.bounds = new bounds( 1100, 100, 400, 200)
+        o.fill = "white"
+        o.stroke = "blue"
+        o.strokeLinejoin = strokeLinejoin.BEVEL;
+        o.strokeWidth = 20
+    }) )
 }

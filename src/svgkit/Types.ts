@@ -249,6 +249,10 @@ export class stringList implements stringifiable {
     }
 }
 
+export enum strokeLinejoin {
+    MITER="miter", ROUND="round", BEVEL="bevel"
+}
+
 export type paint = string
 
 export enum PreserveAspectRatioAlign {
