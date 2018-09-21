@@ -11,7 +11,7 @@ export function startRegion(element : Element) {
     svg.viewBox = new bounds( 0, 0, 1200, 400 )
 
     svg.addChild(ExtSkRegion.create( r => {
-        r.bounds = { x: 10, y: 10, width: 200, height: 200 }
+        r.bounds = { x: 30, y: 30, width: 200, height: 200 }
         r.background = { fills : [
                 {
                     corderRadii : cornerRadii.of(20,20,20,20),

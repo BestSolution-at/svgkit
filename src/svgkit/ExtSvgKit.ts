@@ -1,6 +1,7 @@
 import { SkNode, SVG_NAMESPACE, SkPath, SkG } from "./SvgKit";
-import { bounds, paint, numericBounds } from "./Types";
+import { paint, numericBounds } from "./Types";
 import { cornerRadii, backgroundFill, background } from "./ExtTypes";
+import { nonNull } from "./utils";
 
 export class ExtSkRoundRect extends SkNode {
     private path : SkPath
@@ -23,22 +24,22 @@ export class ExtSkRoundRect extends SkNode {
     private updatePath() {
         if( this.cornerRadii ) {
             this.path.d = 
-                "M " + ( this.x + this.cornerRadii.topLeftHorizontalRadius ) + "," + this.y +
+                "M " + ( nonNull(this.x,0) + nonNull(this.cornerRadii.topLeftHorizontalRadius,0) ) + "," + nonNull(this.y,0) +
                 // top line
-                " h " + ( this.width - this.cornerRadii.topLeftHorizontalRadius - this.cornerRadii.topRightHorizontalRadius ) + 
+                " h " + ( nonNull(this.width,0) - nonNull(this.cornerRadii.topLeftHorizontalRadius,0) - nonNull(this.cornerRadii.topRightHorizontalRadius,0) ) + 
                 // right upper edge
-                " a " + this.cornerRadii.topRightHorizontalRadius + "," + this.cornerRadii.topRightVerticalRadius + " 0 0 1 " + this.cornerRadii.topRightHorizontalRadius + "," + this.cornerRadii.topRightVerticalRadius +
+                " a " + nonNull(this.cornerRadii.topRightHorizontalRadius,0) + "," + nonNull(this.cornerRadii.topRightVerticalRadius,0) + " 0 0 1 " + nonNull(this.cornerRadii.topRightHorizontalRadius,0) + "," + nonNull(this.cornerRadii.topRightVerticalRadius,0) +
                 // right line
-                " v " + ( this.height - this.cornerRadii.topRightVerticalRadius - this.cornerRadii.bottomRightVerticalRadius ) +
+                " v " + ( nonNull(this.height,0) - nonNull(this.cornerRadii.topRightVerticalRadius,0) - nonNull(this.cornerRadii.bottomRightVerticalRadius,0) ) +
                 // right bottom edge
-                " a " + -this.cornerRadii.bottomRightHorizontalRadius + "," + this.cornerRadii.bottomRightVerticalRadius + " 0 0 1 " + -this.cornerRadii.bottomRightHorizontalRadius + "," + this.cornerRadii.bottomRightVerticalRadius +
-                " h " + -( this.width - this.cornerRadii.bottomRightHorizontalRadius - this.cornerRadii.bottomLeftHorizontalRadius ) +
-                " a " + -this.cornerRadii.bottomLeftHorizontalRadius + "," + -this.cornerRadii.bottomLeftVerticalRadius + " 0 0 1 " + -this.cornerRadii.bottomLeftHorizontalRadius + "," + -this.cornerRadii.bottomLeftVerticalRadius +
-                " v " + -( this.height - this.cornerRadii.bottomLeftVerticalRadius - this.cornerRadii.topLeftVerticalRadius ) +
-                " a " + this.cornerRadii.topLeftHorizontalRadius + "," + -this.cornerRadii.topLeftVerticalRadius + " 0 0 1 " + this.cornerRadii.topLeftHorizontalRadius + "," + -this.cornerRadii.topLeftVerticalRadius +
+                " a " + -nonNull(this.cornerRadii.bottomRightHorizontalRadius,0) + "," + nonNull(this.cornerRadii.bottomRightVerticalRadius,0) + " 0 0 1 " + -nonNull(this.cornerRadii.bottomRightHorizontalRadius,0) + "," + nonNull(this.cornerRadii.bottomRightVerticalRadius,0) +
+                " h " + -( nonNull(this.width,0) - nonNull(this.cornerRadii.bottomRightHorizontalRadius,0) - nonNull(this.cornerRadii.bottomLeftHorizontalRadius,0) ) +
+                " a " + -nonNull(this.cornerRadii.bottomLeftHorizontalRadius,0) + "," + -nonNull(this.cornerRadii.bottomLeftVerticalRadius,0) + " 0 0 1 " + -nonNull(this.cornerRadii.bottomLeftHorizontalRadius,0) + "," + -nonNull(this.cornerRadii.bottomLeftVerticalRadius,0) +
+                " v " + -( nonNull(this.height,0) - nonNull(this.cornerRadii.bottomLeftVerticalRadius,0) - nonNull(this.cornerRadii.topLeftVerticalRadius,0) ) +
+                " a " + nonNull(this.cornerRadii.topLeftHorizontalRadius,0) + "," + -nonNull(this.cornerRadii.topLeftVerticalRadius,0) + " 0 0 1 " + nonNull(this.cornerRadii.topLeftHorizontalRadius,0) + "," + -nonNull(this.cornerRadii.topLeftVerticalRadius,0) +
                 " z"
         } else {
-            this.path.d = "M " + this.x + "," + this.y + " h " + this.width + " v " + this.height + " h " + -this.width + " z"
+            this.path.d = "M " + nonNull(this.x,0) + "," + nonNull(this.y,0) + " h " + nonNull(this.width,0) + " v " + nonNull(this.height,0) + " h " + -nonNull(this.width,0) + " z"
         }
     }
 
@@ -101,6 +102,7 @@ export class ExtSkRegion extends SkNode {
     }
 
     private updateDom() {
+        this.domNode.setAttribute("transform","translate("+this._x+","+this._y+")");
         if( ! this.background ) {
             this.backgroundRects.forEach( e => e.domNode.remove() );
             this.backgroundRects = [];
@@ -126,10 +128,10 @@ export class ExtSkRegion extends SkNode {
         rect.fill = fill.paint;
         rect.cornerRadii = fill.corderRadii;
         rect.bounds = { 
-            x : fill.insets.left,
-            y : fill.insets.top,
-            width : this._width - fill.insets.left - fill.insets.right,
-            height : this._height - fill.insets.top - fill.insets.bottom
+            x : fill.insets ? fill.insets.left : 0,
+            y : fill.insets ? fill.insets.top : 0,
+            width : this._width - (fill.insets ? fill.insets.left : 0) - (fill.insets ? fill.insets.right : 0),
+            height : this._height - (fill.insets ? fill.insets.top : 0 ) - (fill.insets ? fill.insets.bottom : 0 )
         };
     }
 
